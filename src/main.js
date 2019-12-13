@@ -31,7 +31,7 @@ const renderTask = (task) => {
 
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
-render(siteHeaderElement, new SiteMenuComponent(), RenderPosition.BEFOREEND);
+render(siteHeaderElement, new SiteMenuComponent().getElement(), RenderPosition.BEFOREEND);
 const filters = generateFilters();
 render(siteMainElement, new FilterComponent(filters).getElement(), RenderPosition.BEFOREEND);
 
