@@ -1,5 +1,6 @@
 export default class Task {
   constructor(data) {
+    console.log(data[`id`]);
     this.id = data[`id`];
     this.description = data[`description`] || ``;
     this.dueDate = data[`due_date`] ? new Date(data[`due_date`]) : null;

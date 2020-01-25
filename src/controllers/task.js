@@ -28,6 +28,8 @@ export const EmptyTask = {
   isArchive: false,
 };
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 const parseFormData = (formData) => {
   const date = formData.get(`date`);
   const repeatingDays = DAYS.reduce((acc, day) => {
@@ -92,12 +94,21 @@ export default class TaskController {
 
     this._taskEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
+      this._taskEditComponent.setData({
+        saveButtonText: `Saving...`,
+      });
       const formData = this._taskEditComponent.getData();
       const data = parseFormData(formData);
       this._onDataChange(this, task, data);
     });
 
-    this._taskEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, task, null));
+    this._taskEditComponent.setDeleteButtonClickHandler(() => {
+      this._taskEditComponent.setData({
+        deleteButtonText: `Deleting...`,
+      });
+
+      this._onDataChange(this, task, null);
+    });
 
     switch (mode) {
       case Mode.DEFAULT:
@@ -142,6 +153,21 @@ export default class TaskController {
     }
 
     this._mode = Mode.DEFAULT;
+  }
+
+  shake() {
+    this._taskEditComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    this._taskComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      this._taskEditComponent.getElement().style.animation = ``;
+      this._taskComponent.getElement().style.animation = ``;
+
+      this._taskEditComponent.setData({
+        saveButtonText: `Save`,
+        deleteButtonText: `Delete`,
+      });
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   _replaceTaskToEdit() {
